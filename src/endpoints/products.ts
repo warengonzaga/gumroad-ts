@@ -7,6 +7,8 @@ import type {
   UpdateProductResponse,
   DeleteProductResponse,
   ToggleProductResponse,
+  EnableProductResponse,
+  DisableProductResponse,
 } from "../types.js";
 import type { RequestFn } from "../utils/fetch.js";
 
@@ -63,6 +65,22 @@ export class ProductsEndpoint {
     return this.request<ToggleProductResponse>({
       method: "PUT",
       path: `/products/${productId}/toggle`,
+    });
+  }
+
+  /** Enable (publish) a product */
+  async enable(productId: string): Promise<EnableProductResponse> {
+    return this.request<EnableProductResponse>({
+      method: "PUT",
+      path: `/products/${productId}/enable`,
+    });
+  }
+
+  /** Disable (unpublish) a product */
+  async disable(productId: string): Promise<DisableProductResponse> {
+    return this.request<DisableProductResponse>({
+      method: "PUT",
+      path: `/products/${productId}/disable`,
     });
   }
 }

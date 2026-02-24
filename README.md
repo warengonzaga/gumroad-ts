@@ -9,7 +9,7 @@ A lightweight, TypeScript-first JavaScript SDK for the [Gumroad API v2](https://
 - **TypeScript-first** - Full type definitions for all endpoints and responses
 - **Zero dependencies** - Uses native `fetch` and `crypto.subtle` APIs
 - **Bun-first** - Primary runtime target with full Node.js 16+ compatibility
-- **Complete API coverage** - Products, Sales, Subscribers, Licenses, Offer Codes, Variant Categories, Custom Fields, Resource Subscriptions
+- **Complete API coverage** - Products, Sales, Subscribers, Licenses, Offer Codes, Variant Categories, Custom Fields, Resource Subscriptions, Payouts
 - **Webhook verification** - Built-in HMAC-SHA256 signature verification
 - **Dual module support** - ESM and CommonJS builds
 
@@ -98,6 +98,12 @@ await gumroad.products.delete("product-id");
 
 // Toggle product (enable/disable)
 await gumroad.products.toggle("product-id");
+
+// Enable (publish) a product
+await gumroad.products.enable("product-id");
+
+// Disable (unpublish) a product
+await gumroad.products.disable("product-id");
 ```
 
 ### Sales
@@ -118,6 +124,12 @@ const { sale } = await gumroad.sales.get("sale-id");
 await gumroad.sales.markAsShipped("sale-id", {
   tracking_url: "https://tracking.example.com/123",
 });
+
+// Refund a sale
+await gumroad.sales.refund("sale-id");
+
+// Resend purchase receipt
+await gumroad.sales.resendReceipt("sale-id");
 ```
 
 ### Subscribers
@@ -159,6 +171,12 @@ await gumroad.licenses.disable({
 
 // Decrement uses count
 await gumroad.licenses.decrementUsesCount({
+  product_id: "product-id",
+  license_key: "LICENSE-KEY-123",
+});
+
+// Rotate (regenerate) a license key
+await gumroad.licenses.rotate({
   product_id: "product-id",
   license_key: "LICENSE-KEY-123",
 });
@@ -247,6 +265,16 @@ await gumroad.customFields.update("product-id", "Company", {
 
 // Delete a custom field
 await gumroad.customFields.delete("product-id", "Company");
+```
+
+### Payouts
+
+```typescript
+// List all payouts
+const { payouts } = await gumroad.payouts.list();
+
+// Get a specific payout
+const { payout } = await gumroad.payouts.get("payout-id");
 ```
 
 ### Resource Subscriptions (Webhooks)

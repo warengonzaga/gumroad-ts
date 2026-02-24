@@ -107,4 +107,19 @@ describe("LicensesEndpoint", () => {
     expect(url).toContain("/licenses/decrement_uses_count");
     expect(options.method).toBe("PUT");
   });
+
+  it("should rotate a license key", async () => {
+    const mockData = { success: true, uses: 0, purchase: {} };
+    mockFetchResponse(mockData);
+
+    await client.licenses.rotate({
+      product_id: "prod_1",
+      license_key: "LICENSE-KEY-123",
+    });
+
+    const [url, options] = (globalThis.fetch as ReturnType<typeof mock>).mock
+      .calls[0] as [string, RequestInit];
+    expect(url).toContain("/licenses/rotate");
+    expect(options.method).toBe("PUT");
+  });
 });

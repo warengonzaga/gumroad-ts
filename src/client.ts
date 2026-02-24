@@ -8,6 +8,7 @@ import { OfferCodesEndpoint } from "./endpoints/offer-codes.js";
 import { VariantCategoriesEndpoint } from "./endpoints/variant-categories.js";
 import { CustomFieldsEndpoint } from "./endpoints/custom-fields.js";
 import { ResourceSubscriptionsEndpoint } from "./endpoints/resource-subscriptions.js";
+import { PayoutsEndpoint } from "./endpoints/payouts.js";
 import { createRequestFn } from "./utils/fetch.js";
 import { verifyWebhookSignature } from "./utils/crypto.js";
 import { DEFAULT_BASE_URL } from "./utils/url.js";
@@ -32,6 +33,8 @@ export class GumroadClient {
   readonly customFields: CustomFieldsEndpoint;
   /** Resource Subscriptions (webhooks) API */
   readonly resourceSubscriptions: ResourceSubscriptionsEndpoint;
+  /** Payouts API */
+  readonly payouts: PayoutsEndpoint;
 
   constructor(options: GumroadClientOptions) {
     const token = options.token || this.getTokenFromEnv();
@@ -54,6 +57,7 @@ export class GumroadClient {
     this.variantCategories = new VariantCategoriesEndpoint(request);
     this.customFields = new CustomFieldsEndpoint(request);
     this.resourceSubscriptions = new ResourceSubscriptionsEndpoint(request);
+    this.payouts = new PayoutsEndpoint(request);
   }
 
   /** Verify a webhook signature using HMAC-SHA256 */

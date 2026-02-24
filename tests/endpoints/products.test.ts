@@ -123,4 +123,36 @@ describe("ProductsEndpoint", () => {
     expect(url).toContain("/products/prod_1/toggle");
     expect(options.method).toBe("PUT");
   });
+
+  it("should enable a product", async () => {
+    const mockData = {
+      success: true,
+      product: { id: "prod_1", published: true },
+    };
+    mockFetchResponse(mockData);
+
+    const result = await client.products.enable("prod_1");
+    expect(result.success).toBe(true);
+
+    const [url, options] = (globalThis.fetch as ReturnType<typeof mock>).mock
+      .calls[0] as [string, RequestInit];
+    expect(url).toContain("/products/prod_1/enable");
+    expect(options.method).toBe("PUT");
+  });
+
+  it("should disable a product", async () => {
+    const mockData = {
+      success: true,
+      product: { id: "prod_1", published: false },
+    };
+    mockFetchResponse(mockData);
+
+    const result = await client.products.disable("prod_1");
+    expect(result.success).toBe(true);
+
+    const [url, options] = (globalThis.fetch as ReturnType<typeof mock>).mock
+      .calls[0] as [string, RequestInit];
+    expect(url).toContain("/products/prod_1/disable");
+    expect(options.method).toBe("PUT");
+  });
 });

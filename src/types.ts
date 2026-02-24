@@ -146,6 +146,14 @@ export interface ToggleProductResponse extends GumroadApiResponse {
   product: Product;
 }
 
+export interface EnableProductResponse extends GumroadApiResponse {
+  product: Product;
+}
+
+export interface DisableProductResponse extends GumroadApiResponse {
+  product: Product;
+}
+
 // ============================================================
 // Variant Categories
 // ============================================================
@@ -395,6 +403,14 @@ export interface MarkAsShippedResponse extends GumroadApiResponse {
   sale: Sale;
 }
 
+export interface RefundSaleResponse extends GumroadApiResponse {
+  sale: Sale;
+}
+
+export interface ResendReceiptResponse extends GumroadApiResponse {
+  message: string;
+}
+
 // ============================================================
 // Subscribers
 // ============================================================
@@ -516,6 +532,36 @@ export interface DecrementLicenseParams {
 export interface DecrementLicenseResponse extends GumroadApiResponse {
   uses: number;
   purchase: LicensePurchase;
+}
+
+export interface RotateLicenseParams {
+  product_id: string;
+  license_key: string;
+}
+
+export interface RotateLicenseResponse extends GumroadApiResponse {
+  uses: number;
+  purchase: LicensePurchase;
+}
+
+// ============================================================
+// Payouts
+// ============================================================
+
+export interface Payout {
+  id: string;
+  amount_cents: number;
+  user_id: string;
+  created_at: string;
+  is_paid: boolean;
+}
+
+export interface ListPayoutsResponse extends GumroadApiResponse {
+  payouts: Payout[];
+}
+
+export interface GetPayoutResponse extends GumroadApiResponse {
+  payout: Payout;
 }
 
 // ============================================================

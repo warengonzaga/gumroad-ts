@@ -19,6 +19,7 @@ export { OfferCodesEndpoint } from "./endpoints/offer-codes.js";
 export { VariantCategoriesEndpoint } from "./endpoints/variant-categories.js";
 export { CustomFieldsEndpoint } from "./endpoints/custom-fields.js";
 export { ResourceSubscriptionsEndpoint } from "./endpoints/resource-subscriptions.js";
+export { PayoutsEndpoint } from "./endpoints/payouts.js";
 
 // All types
 export type {
@@ -45,6 +46,8 @@ export type {
   UpdateProductResponse,
   DeleteProductResponse,
   ToggleProductResponse,
+  EnableProductResponse,
+  DisableProductResponse,
 
   // Variant Categories
   VariantCategory,
@@ -91,6 +94,8 @@ export type {
   GetSaleResponse,
   MarkAsShippedParams,
   MarkAsShippedResponse,
+  RefundSaleResponse,
+  ResendReceiptResponse,
 
   // Subscribers
   Subscriber,
@@ -109,6 +114,13 @@ export type {
   DisableLicenseResponse,
   DecrementLicenseParams,
   DecrementLicenseResponse,
+  RotateLicenseParams,
+  RotateLicenseResponse,
+
+  // Payouts
+  Payout,
+  ListPayoutsResponse,
+  GetPayoutResponse,
 
   // Resource Subscriptions
   ResourceSubscriptionType,

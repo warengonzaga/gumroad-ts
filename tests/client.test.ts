@@ -10,6 +10,7 @@ import { OfferCodesEndpoint } from "../src/endpoints/offer-codes";
 import { VariantCategoriesEndpoint } from "../src/endpoints/variant-categories";
 import { CustomFieldsEndpoint } from "../src/endpoints/custom-fields";
 import { ResourceSubscriptionsEndpoint } from "../src/endpoints/resource-subscriptions";
+import { PayoutsEndpoint } from "../src/endpoints/payouts";
 
 describe("GumroadClient", () => {
   it("should create a client with a valid token", () => {
@@ -38,6 +39,7 @@ describe("GumroadClient", () => {
     expect(client.resourceSubscriptions).toBeInstanceOf(
       ResourceSubscriptionsEndpoint,
     );
+    expect(client.payouts).toBeInstanceOf(PayoutsEndpoint);
   });
 
   it("should accept a custom base URL", () => {

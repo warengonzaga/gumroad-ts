@@ -7,6 +7,8 @@ import type {
   DisableLicenseResponse,
   DecrementLicenseParams,
   DecrementLicenseResponse,
+  RotateLicenseParams,
+  RotateLicenseResponse,
 } from "../types.js";
 import type { RequestFn } from "../utils/fetch.js";
 
@@ -47,6 +49,15 @@ export class LicensesEndpoint {
     return this.request<DecrementLicenseResponse>({
       method: "PUT",
       path: "/licenses/decrement_uses_count",
+      body: params as unknown as Record<string, unknown>,
+    });
+  }
+
+  /** Rotate (regenerate) a license key */
+  async rotate(params: RotateLicenseParams): Promise<RotateLicenseResponse> {
+    return this.request<RotateLicenseResponse>({
+      method: "PUT",
+      path: "/licenses/rotate",
       body: params as unknown as Record<string, unknown>,
     });
   }

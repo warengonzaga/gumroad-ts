@@ -82,4 +82,33 @@ describe("SalesEndpoint", () => {
     expect(url).toContain("/sales/sale_1/mark_as_shipped");
     expect(options.method).toBe("PUT");
   });
+
+  it("should refund a sale", async () => {
+    const mockData = {
+      success: true,
+      sale: { id: "sale_1", refunded: true },
+    };
+    mockFetchResponse(mockData);
+
+    const result = await client.sales.refund("sale_1");
+    expect(result.success).toBe(true);
+
+    const [url, options] = (globalThis.fetch as ReturnType<typeof mock>).mock
+      .calls[0] as [string, RequestInit];
+    expect(url).toContain("/sales/sale_1/refund");
+    expect(options.method).toBe("PUT");
+  });
+
+  it("should resend a receipt", async () => {
+    const mockData = { success: true, message: "Receipt sent" };
+    mockFetchResponse(mockData);
+
+    const result = await client.sales.resendReceipt("sale_1");
+    expect(result.success).toBe(true);
+
+    const [url, options] = (globalThis.fetch as ReturnType<typeof mock>).mock
+      .calls[0] as [string, RequestInit];
+    expect(url).toContain("/sales/sale_1/resend_receipt");
+    expect(options.method).toBe("POST");
+  });
 });
