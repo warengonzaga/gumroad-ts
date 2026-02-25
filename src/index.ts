@@ -21,13 +21,15 @@ export { CustomFieldsEndpoint } from "./endpoints/custom-fields.js";
 export { ResourceSubscriptionsEndpoint } from "./endpoints/resource-subscriptions.js";
 export { PayoutsEndpoint } from "./endpoints/payouts.js";
 
+// Internal types re-exported for advanced usage
+export type { RequestOptions } from "./utils/fetch.js";
+
 // All types
 export type {
   // Client
   GumroadClientOptions,
   GumroadApiResponse,
   HttpMethod,
-  RequestOptions,
 
   // User
   User,
@@ -53,6 +55,7 @@ export type {
   VariantCategory,
   Variant,
   CreateVariantCategoryParams,
+  UpdateVariantCategoryParams,
   GetVariantCategoryResponse,
   ListVariantCategoriesResponse,
   CreateVariantCategoryResponse,

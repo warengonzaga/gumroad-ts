@@ -3,6 +3,7 @@ export class GumroadError extends Error {
   constructor(message: string) {
     super(message);
     this.name = "GumroadError";
+    Object.setPrototypeOf(this, GumroadError.prototype);
   }
 }
 
@@ -16,6 +17,7 @@ export class GumroadApiError extends GumroadError {
     this.name = "GumroadApiError";
     this.statusCode = statusCode;
     this.response = response;
+    Object.setPrototypeOf(this, GumroadApiError.prototype);
   }
 }
 
@@ -24,6 +26,7 @@ export class GumroadValidationError extends GumroadError {
   constructor(message: string) {
     super(message);
     this.name = "GumroadValidationError";
+    Object.setPrototypeOf(this, GumroadValidationError.prototype);
   }
 }
 
@@ -35,5 +38,6 @@ export class GumroadNetworkError extends GumroadError {
     super(message);
     this.name = "GumroadNetworkError";
     this.cause = cause;
+    Object.setPrototypeOf(this, GumroadNetworkError.prototype);
   }
 }

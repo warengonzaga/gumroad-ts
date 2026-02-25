@@ -230,6 +230,9 @@ await gumroad.variantCategories.delete("product-id", "category-id");
 // List variants in a category
 const { variants } = await gumroad.variantCategories.listVariants("product-id", "category-id");
 
+// Get a single variant
+const { variant } = await gumroad.variantCategories.getVariant("product-id", "category-id", "variant-id");
+
 // Create a variant
 await gumroad.variantCategories.createVariant("product-id", "category-id", {
   name: "Large",

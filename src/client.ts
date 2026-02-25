@@ -37,7 +37,7 @@ export class GumroadClient {
   readonly payouts: PayoutsEndpoint;
 
   constructor(options: GumroadClientOptions) {
-    const token = options.token || this.getTokenFromEnv();
+    const token = options.token ?? this.getTokenFromEnv();
 
     if (!token) {
       throw new GumroadValidationError(

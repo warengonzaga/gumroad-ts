@@ -3,8 +3,8 @@
 // ============================================================
 
 export interface GumroadClientOptions {
-  /** Gumroad API access token */
-  token: string;
+  /** Gumroad API access token. Falls back to GUMROAD_ACCESS_TOKEN env variable if not provided. */
+  token?: string;
   /** Base URL for the Gumroad API (defaults to https://api.gumroad.com/v2) */
   baseUrl?: string;
 }
@@ -172,6 +172,10 @@ export interface Variant {
 }
 
 export interface CreateVariantCategoryParams {
+  title: string;
+}
+
+export interface UpdateVariantCategoryParams {
   title: string;
 }
 
@@ -643,10 +647,3 @@ export interface WebhookSalePayload {
 // ============================================================
 
 export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
-
-export interface RequestOptions {
-  method: HttpMethod;
-  path: string;
-  params?: Record<string, unknown>;
-  body?: Record<string, unknown>;
-}

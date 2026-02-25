@@ -22,7 +22,6 @@ export function createRequestFn(baseUrl: string, token: string): RequestFn {
 
     const headers: Record<string, string> = {
       Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
     };
 
     const fetchOptions: RequestInit = {
@@ -31,6 +30,7 @@ export function createRequestFn(baseUrl: string, token: string): RequestFn {
     };
 
     if (method !== "GET" && (body || params)) {
+      headers["Content-Type"] = "application/json";
       fetchOptions.body = JSON.stringify(body || params || {});
     }
 

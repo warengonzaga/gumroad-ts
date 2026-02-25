@@ -115,6 +115,28 @@ describe("VariantCategoriesEndpoint", () => {
     );
   });
 
+  it("should get a variant", async () => {
+    const mockData = {
+      success: true,
+      variant: { id: "v_1", name: "Small" },
+    };
+    mockFetchResponse(mockData);
+
+    const result = await client.variantCategories.getVariant(
+      "prod_1",
+      "vc_1",
+      "v_1",
+    );
+    expect(result.success).toBe(true);
+    expect(result.variant.id).toBe("v_1");
+
+    const [url] = (globalThis.fetch as ReturnType<typeof mock>).mock
+      .calls[0] as [string, RequestInit];
+    expect(url).toContain(
+      "/products/prod_1/variant_categories/vc_1/variants/v_1",
+    );
+  });
+
   it("should create a variant", async () => {
     const mockData = {
       success: true,
@@ -133,6 +155,26 @@ describe("VariantCategoriesEndpoint", () => {
       "/products/prod_1/variant_categories/vc_1/variants",
     );
     expect(options.method).toBe("POST");
+  });
+
+  it("should update a variant", async () => {
+    const mockData = {
+      success: true,
+      variant: { id: "v_1", name: "Extra Large" },
+    };
+    mockFetchResponse(mockData);
+
+    await client.variantCategories.updateVariant("prod_1", "vc_1", "v_1", {
+      name: "Extra Large",
+      price_difference_cents: 700,
+    });
+
+    const [url, options] = (globalThis.fetch as ReturnType<typeof mock>).mock
+      .calls[0] as [string, RequestInit];
+    expect(url).toContain(
+      "/products/prod_1/variant_categories/vc_1/variants/v_1",
+    );
+    expect(options.method).toBe("PUT");
   });
 
   it("should delete a variant", async () => {

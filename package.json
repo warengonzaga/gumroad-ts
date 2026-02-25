@@ -3,7 +3,7 @@
   "version": "1.0.0-alpha.1",
   "description": "A lightweight, TypeScript-first JavaScript SDK for the Gumroad API v2.",
   "type": "module",
-  "main": "dist/cjs/index.js",
+  "main": "dist/esm/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
   "exports": {

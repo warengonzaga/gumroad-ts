@@ -60,13 +60,8 @@ describe("GumroadClient", () => {
     process.env.GUMROAD_ACCESS_TOKEN = "env-token";
 
     try {
-      // Pass empty string to force env fallback
-      const client = new GumroadClient({
-        token: "",
-      });
-      // If we get here, the env var was found — but our constructor
-      // checks `options.token || this.getTokenFromEnv()`, so with empty
-      // string it falls through to env. Let's just verify it doesn't throw.
+      // Omit token to trigger env variable fallback
+      const client = new GumroadClient({});
       expect(client).toBeDefined();
     } finally {
       if (original !== undefined) {

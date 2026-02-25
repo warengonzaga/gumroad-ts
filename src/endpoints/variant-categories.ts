@@ -2,6 +2,7 @@ import type {
   ListVariantCategoriesResponse,
   GetVariantCategoryResponse,
   CreateVariantCategoryParams,
+  UpdateVariantCategoryParams,
   CreateVariantCategoryResponse,
   UpdateVariantCategoryResponse,
   DeleteVariantCategoryResponse,
@@ -53,7 +54,7 @@ export class VariantCategoriesEndpoint {
   async update(
     productId: string,
     variantCategoryId: string,
-    params: CreateVariantCategoryParams,
+    params: UpdateVariantCategoryParams,
   ): Promise<UpdateVariantCategoryResponse> {
     return this.request<UpdateVariantCategoryResponse>({
       method: "PUT",
