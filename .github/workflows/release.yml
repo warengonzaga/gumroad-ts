@@ -16,3 +16,4 @@ jobs:
       - uses: wgtechlabs/release-build-flow-action@v1.6.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          commit-convention: clean-commit
