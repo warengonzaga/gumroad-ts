@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>gumroad-ts — TypeScript-first SDK for the Gumroad API</title>
+  <meta name="description" content="A lightweight, TypeScript-first JavaScript SDK for the Gumroad API v2. Zero dependencies. Works with Bun, Node.js, and browsers." />
+  <meta name="theme-color" content="#0d0d0d" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset & Base ─────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0d0d0d;
+      --bg-card: #161616;
+      --bg-code: #1a1a1a;
+      --border: #232323;
+      --text: #e8e8e8;
+      --text-muted: #888;
+      --pink: #ff90e8;
+      --pink-dim: rgba(255, 144, 232, .12);
+      --pink-glow: rgba(255, 144, 232, .06);
+      --gradient: linear-gradient(135deg, #ff90e8, #f5c46c);
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --mono: 'JetBrains Mono', 'Fira Code', monospace;
+      --max-w: 960px;
+      --radius: 12px;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    a { color: var(--pink); text-decoration: none; transition: opacity .2s; }
+    a:hover { opacity: .8; }
+    ::selection { background: var(--pink); color: var(--bg); }
+
+    /* ── Glow backdrop ────────────────────────────────────── */
+    .glow {
+      position: fixed;
+      top: -40%;
+      left: 50%;
+      translate: -50% 0;
+      width: 900px;
+      height: 900px;
+      background: radial-gradient(circle, rgba(255,144,232,.07) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Layout ───────────────────────────────────────────── */
+    .wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ── Nav ──────────────────────────────────────────────── */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 0;
+    }
+    .logo {
+      font-weight: 800;
+      font-size: 1.15rem;
+      letter-spacing: -.02em;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .nav-links { display: flex; gap: 24px; align-items: center; }
+    .nav-links a {
+      color: var(--text-muted);
+      font-size: .875rem;
+      font-weight: 500;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--text); opacity: 1; }
+    .gh-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-size: .8rem;
+      font-weight: 600;
+      color: var(--text) !important;
+      transition: border-color .2s, background .2s;
+    }
+    .gh-btn:hover { border-color: var(--pink); background: var(--pink-dim); opacity: 1; }
+    .gh-btn svg { width: 16px; height: 16px; fill: var(--text); }
+
+    /* ── Hero ─────────────────────────────────────────────── */
+    .hero {
+      text-align: center;
+      padding: 100px 0 80px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--pink-dim);
+      border: 1px solid rgba(255,144,232,.18);
+      border-radius: 999px;
+      padding: 6px 16px;
+      font-size: .78rem;
+      font-weight: 600;
+      color: var(--pink);
+      margin-bottom: 28px;
+    }
+    .badge .dot {
+      width: 6px; height: 6px;
+      background: var(--pink);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: .3; }
+    }
+    h1 {
+      font-size: clamp(2.4rem, 6vw, 3.6rem);
+      font-weight: 800;
+      letter-spacing: -.035em;
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+    h1 .highlight {
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .subtitle {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      max-width: 560px;
+      margin: 0 auto 36px;
+      line-height: 1.7;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 28px;
+      border-radius: 10px;
+      font-size: .9rem;
+      font-weight: 600;
+      font-family: var(--font);
+      border: none;
+      cursor: pointer;
+      transition: transform .15s, box-shadow .2s;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary {
+      background: var(--gradient);
+      color: #0d0d0d;
+      box-shadow: 0 0 32px rgba(255,144,232,.2);
+    }
+    .btn-primary:hover { box-shadow: 0 0 48px rgba(255,144,232,.3); opacity: 1; }
+    .btn-secondary {
+      background: var(--bg-card);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover { border-color: #444; opacity: 1; }
+
+    /* ── Install strip ────────────────────────────────────── */
+    .install-strip {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 28px;
+    }
+    .install-cmd {
+      font-family: var(--mono);
+      font-size: .85rem;
+      color: var(--text-muted);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 18px;
+      user-select: all;
+    }
+    .install-cmd span { color: var(--pink); }
+
+    /* ── Features ─────────────────────────────────────────── */
+    .section { padding: 80px 0; }
+    .section-label {
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--pink);
+      margin-bottom: 12px;
+    }
+    h2 {
+      font-size: 1.85rem;
+      font-weight: 700;
+      letter-spacing: -.025em;
+      margin-bottom: 48px;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      transition: border-color .25s, box-shadow .25s;
+    }
+    .feature-card:hover {
+      border-color: rgba(255,144,232,.25);
+      box-shadow: 0 0 40px var(--pink-glow);
+    }
+    .feature-icon {
+      width: 40px; height: 40px;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--pink-dim);
+      border-radius: 10px;
+      margin-bottom: 16px;
+      font-size: 1.15rem;
+    }
+    .feature-card h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .feature-card p {
+      font-size: .875rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* ── Code blocks ──────────────────────────────────────── */
+    .code-section { padding: 80px 0; }
+    .code-tabs {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 0;
+    }
+    .code-tab {
+      padding: 8px 18px;
+      font-size: .8rem;
+      font-weight: 600;
+      font-family: var(--font);
+      color: var(--text-muted);
+      background: transparent;
+      border: none;
+      border-radius: 8px 8px 0 0;
+      cursor: pointer;
+      transition: color .2s, background .2s;
+    }
+    .code-tab.active {
+      color: var(--pink);
+      background: var(--bg-code);
+    }
+    .code-tab:hover { color: var(--text); }
+    .code-panels {}
+    .code-panel {
+      display: none;
+      background: var(--bg-code);
+      border: 1px solid var(--border);
+      border-radius: 0 var(--radius) var(--radius) var(--radius);
+      padding: 28px;
+      overflow-x: auto;
+    }
+    .code-panel.active { display: block; }
+    pre {
+      margin: 0;
+      font-family: var(--mono);
+      font-size: .825rem;
+      line-height: 1.75;
+      color: var(--text);
+    }
+    .token-kw { color: #c792ea; }
+    .token-str { color: #c3e88d; }
+    .token-cm { color: #546e7a; }
+    .token-fn { color: #82aaff; }
+    .token-const { color: #f5c46c; }
+    .token-op { color: #89ddff; }
+    .token-type { color: #ffcb6b; }
+    .token-prop { color: #e8e8e8; }
+    .token-num { color: #f78c6c; }
+
+    /* ── Endpoints ────────────────────────────────────────── */
+    .endpoints-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+    .endpoint-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      transition: border-color .2s;
+    }
+    .endpoint-card:hover { border-color: rgba(255,144,232,.2); }
+    .endpoint-card h4 {
+      font-size: .9rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .endpoint-card p {
+      font-size: .78rem;
+      color: var(--text-muted);
+    }
+
+    /* ── Sponsor ──────────────────────────────────────────── */
+    .sponsor-section {
+      padding: 80px 0;
+      text-align: center;
+    }
+    .sponsor-card {
+      background: linear-gradient(135deg, rgba(255,144,232,.06), rgba(245,196,108,.04));
+      border: 1px solid rgba(255,144,232,.15);
+      border-radius: 16px;
+      padding: 56px 40px;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .sponsor-card h2 { margin-bottom: 16px; }
+    .sponsor-card p {
+      color: var(--text-muted);
+      font-size: .95rem;
+      margin-bottom: 28px;
+      line-height: 1.7;
+    }
+    .sponsor-hearts {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+    .btn-sponsor {
+      background: var(--pink-dim);
+      color: var(--pink);
+      border: 1px solid rgba(255,144,232,.2);
+    }
+    .btn-sponsor:hover {
+      background: rgba(255,144,232,.18);
+      opacity: 1;
+      box-shadow: 0 0 32px rgba(255,144,232,.12);
+    }
+
+    /* ── Runtime badges ───────────────────────────────────── */
+    .runtime-bar {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 48px;
+    }
+    .runtime-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: .8rem;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+    .runtime-badge .check { color: #4ade80; }
+
+    /* ── Footer ───────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 0;
+      text-align: center;
+      font-size: .8rem;
+      color: var(--text-muted);
+    }
+    footer a { color: var(--text-muted); }
+    footer a:hover { color: var(--pink); }
+    .footer-links {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    /* ── Responsive ───────────────────────────────────────── */
+    @media (max-width: 640px) {
+      .hero { padding: 64px 0 48px; }
+      h1 { font-size: 2rem; }
+      .nav-links a:not(.gh-btn) { display: none; }
+      .sponsor-card { padding: 36px 24px; }
+      .install-cmd { font-size: .78rem; padding: 8px 14px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="glow" aria-hidden="true"></div>
+
+<div class="wrapper">
+
+  <!-- ── Nav ──────────────────────────────────────────────── -->
+  <nav>
+    <div class="logo">gumroad-ts</div>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#quickstart">Quick Start</a>
+      <a href="#sponsor">Sponsor</a>
+      <a href="https://github.com/warengonzaga/gumroad.js" target="_blank" class="gh-btn">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        GitHub
+      </a>
+    </div>
+  </nav>
+
+  <!-- ── Hero ─────────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="badge"><span class="dot"></span> Free &amp; Open Source</div>
+    <h1>
+      The <span class="highlight">TypeScript SDK</span><br />
+      for the Gumroad API
+    </h1>
+    <p class="subtitle">
+      A lightweight, zero-dependency SDK for the Gumroad API v2.<br />
+      Full type safety. Works with Bun, Node.js, and browsers.
+    </p>
+    <div class="hero-actions">
+      <a href="#quickstart" class="btn btn-primary">Get Started</a>
+      <a href="https://github.com/warengonzaga/gumroad.js" target="_blank" class="btn btn-secondary">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        View on GitHub
+      </a>
+    </div>
+    <div class="install-strip">
+      <code class="install-cmd"><span>$</span> npm install gumroad-ts</code>
+    </div>
+    <div class="runtime-bar">
+      <div class="runtime-badge"><span class="check">✓</span> Bun 1.0+</div>
+      <div class="runtime-badge"><span class="check">✓</span> Node.js 16+</div>
+      <div class="runtime-badge"><span class="check">✓</span> Browsers</div>
+      <div class="runtime-badge"><span class="check">✓</span> Zero Dependencies</div>
+    </div>
+  </section>
+
+  <!-- ── Features ─────────────────────────────────────────── -->
+  <section class="section" id="features">
+    <div class="section-label">Features</div>
+    <h2>Everything you need to build with Gumroad</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🔷</div>
+        <h3>TypeScript-first</h3>
+        <p>Full type definitions for every endpoint, request, and response. Catch errors before they happen.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🪶</div>
+        <h3>Zero Dependencies</h3>
+        <p>Built entirely on native <code>fetch</code> and <code>crypto.subtle</code> APIs. No bloat, no supply chain risk.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>Bun-first Runtime</h3>
+        <p>Primary target is Bun with full Node.js 16+ and browser compatibility baked in.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📦</div>
+        <h3>Complete API Coverage</h3>
+        <p>Products, Sales, Subscribers, Licenses, Offer Codes, Variants, Custom Fields, Webhooks, and Payouts.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔒</div>
+        <h3>Webhook Verification</h3>
+        <p>Built-in HMAC-SHA256 signature verification to secure your incoming webhook payloads.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📋</div>
+        <h3>Dual Module Support</h3>
+        <p>Ships both ESM and CommonJS builds so it works seamlessly in any project setup.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Quick Start ──────────────────────────────────────── -->
+  <section class="code-section" id="quickstart">
+    <div class="section-label">Quick Start</div>
+    <h2>Up and running in minutes</h2>
+
+    <div class="code-tabs">
+      <button class="code-tab active" data-tab="init">Initialize</button>
+      <button class="code-tab" data-tab="products">Products</button>
+      <button class="code-tab" data-tab="sales">Sales</button>
+      <button class="code-tab" data-tab="webhooks">Webhooks</button>
+    </div>
+    <div class="code-panels">
+
+      <!-- Init -->
+      <div class="code-panel active" data-panel="init">
+<pre><span class="token-cm">// Install the package</span>
+<span class="token-cm">// npm install gumroad-ts</span>
+
+<span class="token-kw">import</span> { <span class="token-type">GumroadClient</span> } <span class="token-kw">from</span> <span class="token-str">"gumroad-ts"</span><span class="token-op">;</span>
+
+<span class="token-kw">const</span> <span class="token-const">gumroad</span> <span class="token-op">=</span> <span class="token-kw">new</span> <span class="token-fn">GumroadClient</span>({
+  <span class="token-prop">token</span><span class="token-op">:</span> <span class="token-str">"your-access-token"</span><span class="token-op">,</span>
+})<span class="token-op">;</span>
+
+<span class="token-cm">// Get authenticated user</span>
+<span class="token-kw">const</span> { <span class="token-const">user</span> } <span class="token-op">=</span> <span class="token-kw">await</span> <span class="token-const">gumroad</span>.<span class="token-prop">user</span>.<span class="token-fn">get</span>()<span class="token-op">;</span>
+<span class="token-const">console</span>.<span class="token-fn">log</span>(<span class="token-const">user</span>.<span class="token-prop">name</span>)<span class="token-op">;</span></pre>
+      </div>
+
+      <!-- Products -->
+      <div class="code-panel" data-panel="products">
+<pre><span class="token-cm">// List all products</span>
+<span class="token-kw">const</span> { <span class="token-const">products</span> } <span class="token-op">=</span> <span class="token-kw">await</span> <span class="token-const">gumroad</span>.<span class="token-prop">products</span>.<span class="token-fn">list</span>()<span class="token-op">;</span>
+
+<span class="token-cm">// Create a product</span>
+<span class="token-kw">const</span> { <span class="token-const">product</span> } <span class="token-op">=</span> <span class="token-kw">await</span> <span class="token-const">gumroad</span>.<span class="token-prop">products</span>.<span class="token-fn">create</span>({
+  <span class="token-prop">name</span><span class="token-op">:</span> <span class="token-str">"My Product"</span><span class="token-op">,</span>
+  <span class="token-prop">price</span><span class="token-op">:</span> <span class="token-num">1000</span><span class="token-op">,</span> <span class="token-cm">// in cents</span>
+})<span class="token-op">;</span>
+
+<span class="token-cm">// Get a single product</span>
+<span class="token-kw">const</span> { <span class="token-const">product</span> } <span class="token-op">=</span> <span class="token-kw">await</span> <span class="token-const">gumroad</span>.<span class="token-prop">products</span>.<span class="token-fn">get</span>(<span class="token-str">"product-id"</span>)<span class="token-op">;</span>
+
+<span class="token-cm">// Delete a product</span>
+<span class="token-kw">await</span> <span class="token-const">gumroad</span>.<span class="token-prop">products</span>.<span class="token-fn">delete</span>(<span class="token-str">"product-id"</span>)<span class="token-op">;</span></pre>
+      </div>
+
+      <!-- Sales -->
+      <div class="code-panel" data-panel="sales">
+<pre><span class="token-cm">// List sales with optional filters</span>
+<span class="token-kw">const</span> { <span class="token-const">sales</span> } <span class="token-op">=</span> <span class="token-kw">await</span> <span class="token-const">gumroad</span>.<span class="token-prop">sales</span>.<span class="token-fn">list</span>({
+  <span class="token-prop">after</span><span class="token-op">:</span> <span class="token-str">"2024-01-01"</span><span class="token-op">,</span>
+  <span class="token-prop">before</span><span class="token-op">:</span> <span class="token-str">"2024-12-31"</span><span class="token-op">,</span>
+})<span class="token-op">;</span>
+
+<span class="token-cm">// Refund a sale</span>
+<span class="token-kw">await</span> <span class="token-const">gumroad</span>.<span class="token-prop">sales</span>.<span class="token-fn">refund</span>(<span class="token-str">"sale-id"</span>)<span class="token-op">;</span>
+
+<span class="token-cm">// List subscribers</span>
+<span class="token-kw">const</span> { <span class="token-const">subscribers</span> } <span class="token-op">=</span> <span class="token-kw">await</span> <span class="token-const">gumroad</span>.<span class="token-prop">subscribers</span>.<span class="token-fn">list</span>(<span class="token-str">"product-id"</span>)<span class="token-op">;</span></pre>
+      </div>
+
+      <!-- Webhooks -->
+      <div class="code-panel" data-panel="webhooks">
+<pre><span class="token-cm">// Create a webhook subscription</span>
+<span class="token-kw">await</span> <span class="token-const">gumroad</span>.<span class="token-prop">resourceSubscriptions</span>.<span class="token-fn">create</span>({
+  <span class="token-prop">resource_name</span><span class="token-op">:</span> <span class="token-str">"sale"</span><span class="token-op">,</span>
+  <span class="token-prop">post_url</span><span class="token-op">:</span> <span class="token-str">"https://your-server.com/webhooks"</span><span class="token-op">,</span>
+})<span class="token-op">;</span>
+
+<span class="token-cm">// Verify webhook signature</span>
+<span class="token-kw">const</span> <span class="token-const">isValid</span> <span class="token-op">=</span> <span class="token-kw">await</span> <span class="token-const">gumroad</span>.<span class="token-fn">verifyWebhookSignature</span>(
+  <span class="token-const">rawPayload</span><span class="token-op">,</span>
+  <span class="token-const">signature</span><span class="token-op">,</span>
+  <span class="token-const">webhookSecret</span><span class="token-op">,</span>
+)<span class="token-op">;</span></pre>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── API Endpoints ────────────────────────────────────── -->
+  <section class="section" id="endpoints">
+    <div class="section-label">API Coverage</div>
+    <h2>Complete Gumroad API v2 support</h2>
+    <div class="endpoints-grid">
+      <div class="endpoint-card">
+        <h4>Products</h4>
+        <p>List, create, update, delete, toggle, enable, and disable products.</p>
+      </div>
+      <div class="endpoint-card">
+        <h4>Sales</h4>
+        <p>List, get, mark shipped, refund, and resend receipts for sales.</p>
+      </div>
+      <div class="endpoint-card">
+        <h4>Subscribers</h4>
+        <p>List and retrieve subscriber details for subscription products.</p>
+      </div>
+      <div class="endpoint-card">
+        <h4>Licenses</h4>
+        <p>Verify, enable, disable, decrement usage, and rotate license keys.</p>
+      </div>
+      <div class="endpoint-card">
+        <h4>Offer Codes</h4>
+        <p>Create and manage discount offer codes for your products.</p>
+      </div>
+      <div class="endpoint-card">
+        <h4>Variant Categories</h4>
+        <p>Manage product variants and variant categories with full CRUD.</p>
+      </div>
+      <div class="endpoint-card">
+        <h4>Custom Fields</h4>
+        <p>Add, update, and remove custom checkout fields on products.</p>
+      </div>
+      <div class="endpoint-card">
+        <h4>Resource Subscriptions</h4>
+        <p>Set up and manage webhook subscriptions for real-time events.</p>
+      </div>
+      <div class="endpoint-card">
+        <h4>Payouts</h4>
+        <p>List and retrieve payout history and details.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Sponsor ──────────────────────────────────────────── -->
+  <section class="sponsor-section" id="sponsor">
+    <div class="sponsor-card">
+      <div class="sponsor-hearts">💖</div>
+      <h2>Sponsor this Project</h2>
+      <p>
+        <strong>gumroad-ts</strong> is free and open source, released under the MIT license.
+        If it saves you time or helps power your project, consider sponsoring to keep development going.
+      </p>
+      <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+        <a href="https://github.com/sponsors/warengonzaga" target="_blank" class="btn btn-sponsor">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M4.25 2.5c-1.336 0-2.75 1.164-2.75 3 0 2.15 1.58 4.144 3.365 5.682A20.565 20.565 0 008 13.393a20.561 20.561 0 003.135-2.211C12.92 9.644 14.5 7.65 14.5 5.5c0-1.836-1.414-3-2.75-3-1.373 0-2.609.986-3.029 2.456a.75.75 0 01-1.442 0C6.859 3.486 5.623 2.5 4.25 2.5z"/></svg>
+          Sponsor on GitHub
+        </a>
+        <a href="https://buymeacoffee.com/warengonzaga" target="_blank" class="btn btn-secondary">
+          ☕ Buy me a coffee
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Footer ───────────────────────────────────────────── -->
+  <footer>
+    <div class="footer-links">
+      <a href="https://github.com/warengonzaga/gumroad.js" target="_blank">GitHub</a>
+      <a href="https://www.npmjs.com/package/gumroad-ts" target="_blank">npm</a>
+      <a href="https://github.com/warengonzaga/gumroad.js/blob/main/LICENSE" target="_blank">MIT License</a>
+      <a href="https://github.com/warengonzaga/gumroad.js/blob/main/CONTRIBUTING.md" target="_blank">Contributing</a>
+    </div>
+    <p>Created by <a href="https://github.com/warengonzaga" target="_blank">Waren Gonzaga</a> · © 2026 · Made with ♥</p>
+  </footer>
+
+</div>
+
+<script>
+  // Tab switching
+  document.querySelectorAll('.code-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const target = tab.dataset.tab;
+      document.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.code-panel').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.querySelector(`[data-panel="${target}"]`).classList.add('active');
+    });
+  });
+
+  // Smooth reveal on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.feature-card, .endpoint-card, .sponsor-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity .5s ease, transform .5s ease';
+    observer.observe(el);
+  });
+</script>
+
+</body>
+</html>
