@@ -9,6 +9,7 @@ node_modules
 
 # dotenv
 .env
+.env.*
 
 # npm
 package-lock.json
@@ -21,3 +22,15 @@ package-lock.json
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# build output
+dist
+
+# bun
+bun.lockb
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
