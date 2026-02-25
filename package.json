@@ -24,7 +24,9 @@
     "build:cjs": "tsc --project tsconfig.cjs.json && echo '{\"type\":\"commonjs\"}' > dist/cjs/package.json",
     "test": "bun test",
     "typecheck": "tsc --noEmit",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "dev": "vite",
+    "build:pages": "vite build"
   },
   "repository": {
     "type": "git",
@@ -49,7 +51,8 @@
     "node": ">=16.0.0"
   },
   "devDependencies": {
-    "typescript": "^5.3.0"
+    "typescript": "^5.3.0",
+    "vite": "^6.0.0"
   },
   "dependencies": {},
   "publishConfig": {
