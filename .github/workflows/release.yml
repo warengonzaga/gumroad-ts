@@ -15,5 +15,5 @@ jobs:
           fetch-depth: 0
       - uses: wgtechlabs/release-build-flow-action@v1.6.0
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GH_PAT }}
           commit-convention: clean-commit
