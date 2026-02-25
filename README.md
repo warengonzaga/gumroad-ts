@@ -1,4 +1,4 @@
-# gumroad.js
+# gumroad-ts
 
 [![created by](https://img.shields.io/badge/created%20by-Waren%20Gonzaga-blue.svg?longCache=true&style=flat-square)](https://github.com/warengonzaga) [![release](https://img.shields.io/github/release/warengonzaga/gumroad.js.svg?style=flat-square)](https://github.com/warengonzaga/gumroad.js/releases) [![star](https://img.shields.io/github/stars/warengonzaga/gumroad.js.svg?style=flat-square)](https://github.com/warengonzaga/gumroad.js/stargazers) [![license](https://img.shields.io/github/license/warengonzaga/gumroad.js.svg?style=flat-square)](https://github.com/warengonzaga/gumroad.js/blob/main/license)
 
@@ -17,22 +17,22 @@ A lightweight, TypeScript-first JavaScript SDK for the [Gumroad API v2](https://
 
 ```bash
 # bun
-bun add gumroad.js
+bun add gumroad-ts
 
 # npm
-npm install gumroad.js
+npm install gumroad-ts
 
 # pnpm
-pnpm add gumroad.js
+pnpm add gumroad-ts
 
 # yarn
-yarn add gumroad.js
+yarn add gumroad-ts
 ```
 
 ## Quick Start
 
 ```typescript
-import { GumroadClient } from "gumroad.js";
+import { GumroadClient } from "gumroad-ts";
 
 const gumroad = new GumroadClient({
   token: "your-access-token",
@@ -322,7 +322,7 @@ import {
   GumroadApiError,
   GumroadValidationError,
   GumroadNetworkError,
-} from "gumroad.js";
+} from "gumroad-ts";
 
 try {
   await gumroad.products.get("invalid-id");
@@ -366,11 +366,11 @@ Read the project's [code of conduct](./CODE_OF_CONDUCT.md).
 
 ## License
 
-gumroad.js is licensed under [The MIT License](https://opensource.org/licenses/MIT).
+gumroad-ts is licensed under [The MIT License](https://opensource.org/licenses/MIT).
 
 ## Author
 
-gumroad.js is created by **[Waren Gonzaga](https://github.com/warengonzaga)**, with the help of awesome [contributors](https://github.com/warengonzaga/gumroad.js/graphs/contributors).
+gumroad-ts is created by **[Waren Gonzaga](https://github.com/warengonzaga)**, with the help of awesome [contributors](https://github.com/warengonzaga/gumroad.js/graphs/contributors).
 
 ---
 
