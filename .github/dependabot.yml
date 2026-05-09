@@ -9,7 +9,7 @@ updates:
       day: "monday"
     open-pull-requests-limit: 10
     commit-message:
-      prefix: "☕ chore:"
+      prefix: "☕ chore: "
     labels:
       - "security"
       - "infra"
@@ -29,7 +29,7 @@ updates:
       day: "monday"
     open-pull-requests-limit: 5
     commit-message:
-      prefix: "☕ chore:"
+      prefix: "☕ chore: "
     labels:
       - "security"
       - "infra"
