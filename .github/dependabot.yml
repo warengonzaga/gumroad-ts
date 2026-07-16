@@ -1,9 +1,12 @@
 version: 2
 updates:
   # npm dependencies
+  # Note: this repo uses Bun as its package manager and commits bun.lock.
+  # Dependabot's npm updater will not regenerate bun.lock; consider using
+  # Renovate or a post-merge workflow to keep bun.lock in sync with Dependabot PRs.
   - package-ecosystem: "npm"
     directory: "/"
-    target-branch: "main"
+    target-branch: "dev"
     schedule:
       interval: "weekly"
       day: "monday"
@@ -23,7 +26,7 @@ updates:
   # GitHub Actions versions
   - package-ecosystem: "github-actions"
     directory: "/"
-    target-branch: "main"
+    target-branch: "dev"
     schedule:
       interval: "weekly"
       day: "monday"
