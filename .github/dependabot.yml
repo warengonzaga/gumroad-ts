@@ -1,0 +1,38 @@
+version: 2
+updates:
+  # npm dependencies
+  # Note: this repo uses Bun as its package manager and commits bun.lock.
+  # Dependabot's npm updater will not regenerate bun.lock; consider using
+  # Renovate or a post-merge workflow to keep bun.lock in sync with Dependabot PRs.
+  - package-ecosystem: "npm"
+    directory: "/"
+    target-branch: "dev"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 10
+    commit-message:
+      prefix: "☕ chore (deps): "
+    labels:
+      - "security"
+      - "infra"
+    groups:
+      # Group minor/patch updates together to reduce PR noise
+      minor-and-patch:
+        update-types:
+          - "minor"
+          - "patch"
+
+  # GitHub Actions versions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    target-branch: "dev"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "☕ chore (deps): "
+    labels:
+      - "security"
+      - "infra"
