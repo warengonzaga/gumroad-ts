@@ -10,12 +10,12 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
       - uses: oven-sh/setup-bun@v2
       - run: bun install
-      - uses: wgtechlabs/release-build-flow-action@v1.6.0
+      - uses: wgtechlabs/release-build-flow-action@v1.8.0
         with:
           github-token: ${{ secrets.GH_PAT }}
           commit-convention: clean-commit

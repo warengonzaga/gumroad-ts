@@ -16,10 +16,10 @@ jobs:
       packages: write
       pull-requests: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: oven-sh/setup-bun@v2
       - run: bun install
-      - uses: wgtechlabs/package-build-flow-action@v2.0.1
+      - uses: wgtechlabs/package-build-flow-action@v2.2.0
         with:
           npm-token: ${{ secrets.NPM_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
