@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- sync dependabot configuration (#34)
+- update CHANGELOG.md for v1.0.0
 - bump actions/checkout from 4 to 7 (#33)
 - bump wgtechlabs/release-build-flow-action (#35)
 - bump wgtechlabs/package-build-flow-action (#36)
