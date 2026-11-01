@@ -21,6 +21,8 @@ jobs:
       - run: bun install
       - uses: wgtechlabs/package-build-flow-action@v2.3.0
         with:
+          registry: ${{ github.event.pull_request.user.login == 'dependabot[bot]' && 'github' || 'both' }}
+          dry-run: ${{ github.event.pull_request.user.login == 'dependabot[bot]' && 'true' || 'false' }}
           npm-token: ${{ secrets.NPM_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           registry: 'both'
